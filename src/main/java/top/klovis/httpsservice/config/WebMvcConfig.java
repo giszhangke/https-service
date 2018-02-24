@@ -4,17 +4,20 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-//@Configuration
+@Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
-    /*
-    private int httpPort = 8081;
-    private int httpsPort = 443;
+    @Value("${tomcat.port}")
+    private int httpPort;
+    @Value("${server.port}")
+    private int httpsPort;
+
     @Bean
     public EmbeddedServletContainerFactory servletContainerFactory() {
         TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory() {
@@ -32,21 +35,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         factory.addAdditionalTomcatConnectors(createHttpConnector());
         return factory;
     }
-    */
 
-//    private Connector createHttpConnector() {
-//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//        connector.setScheme("http");
-//        /**
-//         *Set the secure connection flag that will be assigned to requests received through this connector.
-//         *@param secure The new secure connection flag
-//         *if connector.setSecure(true), the http use the http and https use the https;
-//         * elseif connector.setSecure(false),the http redirect
-//         */
-//        connector.setSecure(true);
-//        connector.setPort(httpPort);
-//        connector.setRedirectPort(httpsPort);
-//        return connector;
-//    }
+    private Connector createHttpConnector() {
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setScheme("http");
+        /**
+         *Set the secure connection flag that will be assigned to requests received through this connector.
+         *@param secure The new secure connection flag
+         *if connector.setSecure(true), the http use the http and https use the https;
+         * elseif connector.setSecure(false),the http redirect
+         */
+        connector.setSecure(true);
+        connector.setPort(httpPort);
+        connector.setRedirectPort(httpsPort);
+        return connector;
+    }
 
 }
