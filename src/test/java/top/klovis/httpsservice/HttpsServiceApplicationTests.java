@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,8 +27,15 @@ public class HttpsServiceApplicationTests {
     }
 
     @Test
-    public void isAlive() throws Exception {
+    public void isPostAlive() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/alive").accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("true")));
+    }
+
+    @Test
+    public void isGetAlive() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/alive").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("true")));
     }
